@@ -1,34 +1,8 @@
 const fs = require("fs");
 const url = require("url");
 const http = require("http");
-const path = require("path");
 
-// const textIn = fs.readFileSync("./txt/input.txt", "utf-8");
-// console.log(textIn);
-
-// const textOut = `This is what we know about the avocado ${textIn}.\nCreated on ${Date.now()} `;
-// fs.writeFileSync("./txt/output.txt", textOut);
-// console.log(`File has been written`);
-
-// Non blocking way
-
-// console.log(`One`);
-// fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
-//   fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
-//     // console.log(data2);
-//     fs.readFile(`./txt/append.txt`, "utf-8", (err, data3) => {
-//       const toni = data2 + data3;
-//       fs.writeFile("./txt/final.txt", toni, "utf-8", (err, _) => {
-//         console.log(`File has been written`);
-//       });
-//     });
-//   });
-// });
-
-// console.log(`Will read file`);
-
-//sERVER
-// const toni = fs.readFile(`${__dirname}/dev-data/data.json`);
+const replaceTemplate = require(`./module/replaceTemplate`);
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const tempOverview = fs.readFileSync(
@@ -45,22 +19,6 @@ const tempProduct = fs.readFileSync(
 );
 
 const dataObj = JSON.parse(data);
-
-// Functions
-const replaceTemplate = function (temp, product) {
-  let output = temp.replaceAll("{%PRODUCTNAME%}", product.productName);
-  output = output.replaceAll("{%IMAGE%}", product.image);
-  output = output.replaceAll("{%PRICE%}", product.price);
-  output = output.replaceAll("{%NUTRIENTS%}", product.nutrients);
-  output = output.replaceAll("{%QUANTITY%}", product.quantity);
-  output = output.replaceAll("{%DESCRIPTION%}", product.description);
-  output = output.replaceAll("{%FROM%}", product.from);
-  output = output.replaceAll("{%id%}", product.id);
-  if (!product.organic) {
-    output = output.replaceAll("{%NOTORGANIC%}", "not-organic");
-  }
-  return output;
-};
 
 const server = http.createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
