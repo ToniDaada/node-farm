@@ -1,8 +1,10 @@
 const fs = require("fs");
 const url = require("url");
 const http = require("http");
+const slufigy = require("slugify");
 
 const replaceTemplate = require(`./module/replaceTemplate`);
+const { default: slugify } = require("slugify");
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const tempOverview = fs.readFileSync(
@@ -19,6 +21,22 @@ const tempProduct = fs.readFileSync(
 );
 
 const dataObj = JSON.parse(data);
+
+const slugs = dataObj.map((data) =>
+  slugify(data.productName, {
+    replacement: "-",
+    lower: true,
+  })
+);
+
+console.log(slugs);
+
+console.log(
+  slufigy("Fresh Avocados", {
+    replacement: "-",
+    lower: true,
+  })
+);
 
 const server = http.createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
